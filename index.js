@@ -1,16 +1,21 @@
 const brain = require('brainjs')
-// creating the NeuralNetworks
+const data = require('./data.json')
+// creating the NeuralNetwork
+const network = brain.recurrent.LTSM()
 
-const network = new brain.NeuralNetwork()
+const trainingData = data.map((item =>{
+ return  {
+    input:item.text,
+    output:item.category
+  }
+}))
 
 //training the network
+network.train(trainingData,{
+  iterations:2000
+});
 
-network.train([
-  { input: [1, 0], output: [0] },
-  { input: [0, 1], output: [1] },
-  { input: [0, 0], output: [1] },
-  { input: [1, 1], output: [0] },
-])
+//Testing the Model for a given input 
 
-const output = network.run([0, 0])
-console.log(`probability : ${output}`)
+const output = network.run("I made corrections on the program flow")
+console.log(`Category : ${output}`)
